@@ -1,20 +1,11 @@
 package com.rest.firstexample.demo.controller;
 
-
-import com.rest.firstexample.demo.model.Role;
 import com.rest.firstexample.demo.model.User;
 import com.rest.firstexample.demo.service.UserServiceImpl;
-import org.jvnet.hk2.internal.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -30,7 +21,6 @@ public class MainRestController {
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<User>> userList() {
         List<User> users = userService.getAllUsers();
-
 
         if(users.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -55,7 +45,7 @@ public class MainRestController {
         return new ResponseEntity<>(users,httpHeaders,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/users/get/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/user/get/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> getUserById(@PathVariable("id") long id){
         User user = userService.getUserById(id);
 
@@ -65,7 +55,7 @@ public class MainRestController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "users/delete/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "user/delete/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") long id){
         User user = userService.getUserById(id);
 
@@ -76,7 +66,7 @@ public class MainRestController {
             return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping (value = "users/update/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping (value = "user/update/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user){
         User usr = userService.getUserById(id);
 
@@ -92,6 +82,23 @@ public class MainRestController {
         return new ResponseEntity<>(usr, HttpStatus.OK);
     }
 
+    @GetMapping (value = "auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+                                consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<User> getUser(@RequestHeader HttpHeaders header) {
+        String login = header.getFirst("login");
+        User user = userService.loadUserByName(login);
 
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+//    public ResponseEntity<List<User>> getLogins(){
+//        List<User> users = userService.getAllUsers();
+//
+//        for (User u : users){
+//            u.setName(null);
+//            u.setPassword(null);
+//        }
+//        return new ResponseEntity<>(users,HttpStatus.OK);
+//    }
 
 }

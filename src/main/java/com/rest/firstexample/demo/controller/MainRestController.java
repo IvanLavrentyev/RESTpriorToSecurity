@@ -91,14 +91,5 @@ public class MainRestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    public ResponseEntity<List<User>> getLogins(){
-//        List<User> users = userService.getAllUsers();
-//
-//        for (User u : users){
-//            u.setName(null);
-//            u.setPassword(null);
-//        }
-//        return new ResponseEntity<>(users,HttpStatus.OK);
-//    }
 
 }
